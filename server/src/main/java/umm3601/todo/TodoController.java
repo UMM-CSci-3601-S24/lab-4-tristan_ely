@@ -31,7 +31,7 @@ public class TodoController implements Controller {
 
   @Override
   public void addRoutes(Javalin server) {
-    server.get(AP_TODOS, this::getTodos);
+    //server.get(AP_TODOS, this::getTodos);
     throw new UnsupportedOperationException("Unimplemented method 'addRoutes'");
   }
 }
