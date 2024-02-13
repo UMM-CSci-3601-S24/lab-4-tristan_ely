@@ -5,6 +5,7 @@ import org.mongojack.JacksonMongoCollection;
 
 import com.mongodb.client.MongoDatabase;
 
+import io.javalin.Javalin;
 import umm3601.Controller;
 
 public class TodoController implements Controller {
@@ -26,5 +27,11 @@ public class TodoController implements Controller {
         "todos",
         Todo.class,
         UuidRepresentation.STANDARD);
+  }
+
+  @Override
+  public void addRoutes(Javalin server) {
+    server.get(AP_TODOS, this::getTodos);
+    throw new UnsupportedOperationException("Unimplemented method 'addRoutes'");
   }
 }
