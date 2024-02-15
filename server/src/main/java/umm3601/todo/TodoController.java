@@ -65,6 +65,13 @@ public class TodoController implements Controller {
 
   }
 
+  private Bson constructFilter(Context ctx) {
+    List<Bson> filters = new ArrayList<>();
+
+    Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
+    return combinedFilter
+  }
+
   @Override
   public void addRoutes(Javalin server) {
     // Get a single todo by ID
