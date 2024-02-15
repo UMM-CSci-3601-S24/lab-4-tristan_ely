@@ -16,7 +16,7 @@ import java.util.Objects;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
-//import org.bson.types.ObjectId;
+import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 
 import com.mongodb.client.MongoDatabase;
@@ -24,10 +24,10 @@ import com.mongodb.client.model.Sorts;
 //import com.mongodb.client.result.DeleteResult;
 
 import io.javalin.Javalin;
-//import io.javalin.http.BadRequestResponse;
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-//import io.javalin.http.NotFoundResponse;
+import io.javalin.http.NotFoundResponse;
 import umm3601.Controller;
 
 public class TodoController implements Controller {
@@ -65,6 +65,23 @@ public class TodoController implements Controller {
 
   }
 
+  public void getTodo(Context ctx) {
+    String id = ctx.pathParam("id");
+    Todo todo;
+
+    try {
+      todo = todoCollection.find(new Document("_id", new ObjectId(id))).first();
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The requested todo id wasn't a legal Mongo Object ID.");
+    }
+    if (todo == null) {
+      throw new NotFoundResponse("The requested todo was not found");
+    } else {
+      ctx.json(todo);
+      ctx.status(HttpStatus.OK);
+    }
+  }
+
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>();
 
@@ -82,7 +99,7 @@ public class TodoController implements Controller {
   @Override
   public void addRoutes(Javalin server) {
     // Get a single todo by ID
-    // server.get(API_USER_BY_ID, this::getTodo);
+    server.get(API_TODO_ID, this::getTodo);
     // list todos, filtered using query parameters
     server.get(API_TODOS, this::getTodos);
 
