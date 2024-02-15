@@ -183,4 +183,14 @@ class TodoControllerSpec {
     verify(mockServer, Mockito.atLeast(2)).get(any(), any());
   }
 
+  @Test
+  void canGetAllTodos() throws IOException {
+    when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(todoArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+
+    assertEquals(db.getCollection("todo").countDocuments(), todoArrayListCaptor.getValue().size());
+  }
 }
