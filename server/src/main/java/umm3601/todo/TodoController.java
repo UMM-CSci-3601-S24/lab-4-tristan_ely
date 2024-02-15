@@ -33,7 +33,7 @@ import umm3601.Controller;
 public class TodoController implements Controller {
 
   private static final String API_TODOS = "api/todos";
-  private static final String API_TODO_ID = "api/todos/:id";
+  private static final String API_TODO_ID = "api/todos/{id}";
   static final String SORT_ORDER_KEY = "sortorder";
 
   private final JacksonMongoCollection<Todo> todoCollection;
