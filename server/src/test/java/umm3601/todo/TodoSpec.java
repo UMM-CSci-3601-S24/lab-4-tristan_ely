@@ -35,4 +35,19 @@ private Todo todo2;
     todo2._id = FAKE_ID_STRING_2;
     assertFalse(todo1.equals(todo2));
   }
+
+  @Test
+  void hashCodesAreBasedOnId() {
+    todo1._id = FAKE_ID_STRING_1;
+    todo2._id = FAKE_ID_STRING_1;
+
+    assertTrue(todo1.hashCode() == todo2.hashCode());
+  }
+
+  @Test
+  void todosAreNotEqualToOtherKindsOfThings() {
+    todo1._id = FAKE_ID_STRING_1;
+    // a todo is not equal to its id even though id is used for checking equality
+    assertFalse(todo1.equals(FAKE_ID_STRING_1));
+  }
 }
