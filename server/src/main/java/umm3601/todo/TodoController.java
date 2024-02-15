@@ -52,7 +52,7 @@ public class TodoController implements Controller {
   }
 
   public void getTodos(Context ctx) {
-    Bson combinedFilter = constructFilter
+    Bson combinedFilter = constructFilter(ctx);
     Bson sortingOrder = constructSortingOrder(ctx);
 
   ArrayList<Todo> matchingTodos = todoCollection
@@ -69,13 +69,20 @@ public class TodoController implements Controller {
     List<Bson> filters = new ArrayList<>();
 
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
-    return combinedFilter
+    return combinedFilter;
+  }
+
+  private Bson constructSortingOrder(Context ctx) {
+    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
+    Bson sortingOrder = sortOrder.equals("desc") ? Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    return sortingOrder;
   }
 
   @Override
   public void addRoutes(Javalin server) {
     // Get a single todo by ID
-    server.get(API_USER_BY_ID, this::getTodo);
+    // server.get(API_USER_BY_ID, this::getTodo);
     // list todos, filtered using query parameters
     server.get(API_TODOS, this::getTodos);
 

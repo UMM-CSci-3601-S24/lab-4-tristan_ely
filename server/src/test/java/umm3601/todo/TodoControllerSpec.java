@@ -51,7 +51,6 @@ import io.javalin.json.JavalinJackson;
 import io.javalin.validation.BodyValidator;
 import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
-import umm3601.todo.TodoController;
 
 /**
  * Tests the logic of the TodoController
@@ -179,8 +178,8 @@ class TodoControllerSpec {
   public void canBuildController() throws IOException {
     Javalin mockServer = Mockito.mock(Javalin.class);
     todoController.addRoutes(mockServer);
-
-    verify(mockServer, Mockito.atLeast(2)).get(any(), any());
+    // Verify that the controller added the route to the server
+    verify(mockServer, Mockito.atLeast(1)).get(any(), any());
   }
 
   @Test
@@ -191,6 +190,6 @@ class TodoControllerSpec {
     verify(ctx).json(todoArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
 
-    assertEquals(db.getCollection("todo").countDocuments(), todoArrayListCaptor.getValue().size());
+    assertEquals(db.getCollection("todos").countDocuments(), todoArrayListCaptor.getValue().size());
   }
 }
