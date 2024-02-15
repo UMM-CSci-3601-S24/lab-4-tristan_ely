@@ -157,8 +157,8 @@ class TodoControllerSpec {
             .append("status", true)
             .append("category", "software design")
             .append("body", "I have to do my software design"));
-    /*
-    fryId = new ObjectId();
+
+    frysId = new ObjectId();
     Document fry =
         new Document()
             .append("_id", samsId)
@@ -166,10 +166,10 @@ class TodoControllerSpec {
             .append("status", true)
             .append("category", "software design")
             .append("body", "I have to do my software design");
-    */
+
 
     todoDocuments.insertMany(testTodos);
-   // todoDocuments.insertOne(fry);
+    todoDocuments.insertOne(fry);
 
     todoController = new TodoController(db);
   }
@@ -192,4 +192,29 @@ class TodoControllerSpec {
 
     assertEquals(db.getCollection("todos").countDocuments(), todoArrayListCaptor.getValue().size());
   }
+
+  @Test
+  void getTodoWithExistentId() IOException {
+    String id = frysID.toHexString();
+    when(ctx.pathParam("id")).thenReturn(id);
+
+    todoController.getTodo(ctx);
+
+    verify(ctx).json(todoCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+    assertEquals("Fry", todoCaptor.getValue().name);
+    assertEquals(frysId.toHexString(), todoCaptor.getValue()._id);
+  }
+
+  @Test
+    void getTodoWithNonexistentId() {
+        String id = "288935f5c668650dc77df581";
+        when(ctx.pathParam("id")).thenReturn(id);
+
+        Throwable exception = assertThrows(NotFoundResponse.class, () -> {
+            todoController.getTodo(ctx);
+        });
+
+        assertEquals("The requested user was not found", exception.getMessage());
+    }
 }
