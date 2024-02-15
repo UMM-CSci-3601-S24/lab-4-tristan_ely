@@ -54,7 +54,7 @@ import io.javalin.validation.Validator;
 import umm3601.todo.TodoController;
 
 /**
- * Tests the logic of the UserController
+ * Tests the logic of the TodoController
  *
  * @throws IOException
  */
@@ -70,7 +70,7 @@ class TodoControllerSpec {
 
   // An instance of the controller we're testing that is prepared in
   // `setupEach()`, and then exercised in the various tests below.
-  private UserController todoController;
+  private TodoController todoController;
 
   // A Mongo object ID that is initialized in `setupEach()` and used
   // in a few of the tests. It isn't used all that often, though,
@@ -158,7 +158,7 @@ class TodoControllerSpec {
             .append("status", true)
             .append("category", "software design")
             .append("body", "I have to do my software design"));
-
+    /*
     fryId = new ObjectId();
     Document fry =
         new Document()
@@ -167,10 +167,20 @@ class TodoControllerSpec {
             .append("status", true)
             .append("category", "software design")
             .append("body", "I have to do my software design");
+    */
 
-    userDocuments.insertMany(testTodos);
-    userDocuments.insertOne(fry);
+    todoDocuments.insertMany(testTodos);
+   // todoDocuments.insertOne(fry);
 
     todoController = new TodoController(db);
   }
+
+  @Test
+  public void canBuildController() throws IOException {
+    Javalin mockServer = Mockito.mock(Javalin.class);
+    todoController.addRoutes(mockServer);
+
+    verify(mockServer, Mockito.atLeast(2)).get(any(), any());
+  }
+
 }
