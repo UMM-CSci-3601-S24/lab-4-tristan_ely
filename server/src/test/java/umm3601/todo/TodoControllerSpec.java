@@ -49,8 +49,8 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
-import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
+// import io.javalin.validation.BodyValidator;
+// import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 
 /**
@@ -243,7 +243,7 @@ class TodoControllerSpec {
     verify(ctx).status(HttpStatus.OK);
 
     assertEquals(2, todoArrayListCaptor.getValue().size());
-    for(Todo todo : todoArrayListCaptor.getValue()) {
+    for (Todo todo : todoArrayListCaptor.getValue()) {
       assertEquals("software design", todo.category);
     }
   }
