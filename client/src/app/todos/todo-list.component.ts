@@ -13,15 +13,16 @@ import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel, MatHint, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { TodoCardComponent } from "./todo-card.component";
 
 
 @Component({
-  selector: 'app-todo-list-component',
-  templateUrl: 'todo-list.component.html',
-  styleUrl: './todo-list.component.scss',
-  providers: [],
-  standalone: true,
-  imports: [MatCard, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatHint, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatNavList, MatListSubheaderCssMatStyler, MatListItem, RouterLink, MatListItemAvatar, MatListItemTitle, MatListItemLine, MatError],
+    selector: 'app-todo-list-component',
+    templateUrl: 'todo-list.component.html',
+    styleUrl: './todo-list.component.scss',
+    providers: [],
+    standalone: true,
+    imports: [MatCard, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatHint, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatNavList, MatListSubheaderCssMatStyler, MatListItem, RouterLink, MatListItemAvatar, MatListItemTitle, MatListItemLine, MatError, TodoCardComponent]
 })
 
 export class TodoListComponent implements OnInit, OnDestroy{
@@ -33,7 +34,9 @@ public todoStatus: boolean;
 public todoOwner: string;
 public todoBody: string;
 public todoCategory: string;
-public todoSortBy: string;
+public todoOrderBy: string;
+public viewType: 'card' | 'list' = 'card';
+
 
 errMsg='';
 private ngUnsubscribe = new Subject<void>();
@@ -52,7 +55,7 @@ private ngUnsubscribe = new Subject<void>();
   getTodosFromServer(): void {
 
     this.todoService.getTodos({
-      sortBy: this.todoSortBy,
+      orderBy: this.todoOrderBy,
       body: this.todoBody,
       category: this.todoCategory
     }).pipe(
