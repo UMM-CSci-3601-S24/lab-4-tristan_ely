@@ -108,4 +108,9 @@ public class TodoController implements Controller {
     server.get(API_TODOS, this::getTodos);
 
   }
+
+public void addNewTodo(Context ctx) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'addNewTodo'");
+}
 }

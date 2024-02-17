@@ -1,5 +1,6 @@
 package umm3601.todo;
 
+import static com.mongodb.client.model.Filters.eq;
 //import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -7,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 //import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +30,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-//import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -49,7 +51,7 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
-// import io.javalin.validation.BodyValidator;
+import io.javalin.validation.BodyValidator;
 // import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 
@@ -264,5 +266,33 @@ class TodoControllerSpec {
     for (Todo todo : todoArrayListCaptor.getValue()) {
       assertEquals("software design", todo.category);
     }
+  }
+
+  @Test
+  void addTodo() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "Billith",
+          "status": false,
+          "category": "software design",
+          "body": "I have to do my software design"
+        }
+        """;
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    todoController.addNewTodo(ctx);
+    verify(ctx).json(mapCaptor.capture());
+
+    verify(ctx).status(HttpStatus.CREATED);
+
+    Document addedTodo = db.getCollection("todos")
+        .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+
+
+    assertEquals("Billith", addedTodo.get("owner"));
+    assertEquals("software design", addedTodo.get("category"));
+    assertEquals("I have to do my software design", addedTodo.get("body"));
+    assertEquals(false, addedTodo.get("status"));
   }
 }
