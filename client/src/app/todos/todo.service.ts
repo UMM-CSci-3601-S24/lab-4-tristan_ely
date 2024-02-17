@@ -32,7 +32,7 @@ export class TodoService {
     })
   }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string } ): Todo[] {
+  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string, body?: string } ): Todo[] {
     let filteredTodos = todos;
 
     if(filters.status != null) {
@@ -45,6 +45,11 @@ export class TodoService {
     }
     if (filters.limit) {
       filteredTodos = filteredTodos.slice(0, filters.limit);
+    }
+
+    if (filters.body) {
+      filters.body = filters.body.toLowerCase();
+      filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
     }
 
     return filteredTodos;
