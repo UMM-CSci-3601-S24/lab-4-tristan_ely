@@ -1,7 +1,7 @@
 package umm3601.todo;
 
 import static com.mongodb.client.model.Filters.and;
-// import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.eq;
 // import static com.mongodb.client.model.Filters.regex;
 
 // import java.nio.charset.StandardCharsets;
@@ -55,14 +55,13 @@ public class TodoController implements Controller {
     Bson combinedFilter = constructFilter(ctx);
     Bson sortingOrder = constructSortingOrder(ctx);
 
-  ArrayList<Todo> matchingTodos = todoCollection
-  .find(combinedFilter)
-  .sort(sortingOrder)
-  .into(new ArrayList<>());
+    ArrayList<Todo> matchingTodos = todoCollection
+      .find(combinedFilter)
+      .sort(sortingOrder)
+      .into(new ArrayList<>());
 
-  ctx.json(matchingTodos);
-  ctx.status(HttpStatus.OK);
-
+    ctx.json(matchingTodos);
+    ctx.status(HttpStatus.OK);
   }
 
   public void getTodo(Context ctx) {
@@ -84,6 +83,11 @@ public class TodoController implements Controller {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>();
+
+    if (ctx.queryParamMap().containsKey("category")) {
+      String category = ctx.queryParamAsClass("category", String.class).get();
+      filters.add(eq("category", category));
+    }
 
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
     return combinedFilter;
