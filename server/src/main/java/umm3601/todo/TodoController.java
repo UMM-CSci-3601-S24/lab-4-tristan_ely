@@ -9,6 +9,7 @@ import static com.mongodb.client.model.Filters.eq;
 // import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 // import java.util.Map;
 import java.util.Objects;
 // import java.util.regex.Pattern;
@@ -35,6 +36,8 @@ public class TodoController implements Controller {
   private static final String API_TODOS = "api/todos";
   private static final String API_TODO_ID = "api/todos/{id}";
   static final String SORT_ORDER_KEY = "sortorder";
+
+  private static final String CATEGORY_REGEX = "^(software design|video games|homework|groceries|)$";
 
   private final JacksonMongoCollection<Todo> todoCollection;
 
@@ -109,8 +112,17 @@ public class TodoController implements Controller {
 
   }
 
-public void addNewTodo(Context ctx) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'addNewTodo'");
-}
+  public void addNewTodo(Context ctx) {
+    Todo newTodo = ctx.bodyValidator(Todo.class)
+      .check(tdo -> tdo.owner != null && tdo.owner.length() > 0, "Todo must have a non-empty owner")
+      .check(tdo -> tdo.status == true || tdo.status == false, "Todo must have a boolean status")
+      .check(tdo -> tdo.body != null && tdo.body.length() > 0, "Todo must have a non-empty body")
+      .check(tdo -> tdo.category.matches(CATEGORY_REGEX), "Todo must have a valid category")
+      .get();
+
+    todoCollection.insertOne(newTodo);
+
+    ctx.json(Map.of("id", newTodo._id));
+    ctx.status(HttpStatus.CREATED);
+  }
 }
