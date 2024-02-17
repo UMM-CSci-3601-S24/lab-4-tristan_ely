@@ -17,7 +17,7 @@
           <mat-form-field class="input-field">
             <mat-label>Contains</mat-label>
             <input matInput data-test="todoBodyInput" placeholder="Filter by contains"
-              [(ngModel)]="todoBody" (input)="getTodosFromServer()">
+              [(ngModel)]="todoBody" (input)="updateFilter()">
           </mat-form-field>
 
           <mat-form-field class="input-field">
