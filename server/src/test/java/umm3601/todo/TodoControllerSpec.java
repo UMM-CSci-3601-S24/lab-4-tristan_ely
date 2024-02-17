@@ -237,7 +237,7 @@ class TodoControllerSpec {
 
     verify(ctx).json(todoArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-  
+
     List<Todo> todos = todoArrayListCaptor.getValue();
     assertEquals(5, todos.size());
     assertEquals("Blanche", todos.get(0).owner);
@@ -246,7 +246,7 @@ class TodoControllerSpec {
     assertEquals("Fry", todos.get(3).owner);
     assertEquals("Fry", todos.get(4).owner);
   }
-  
+
   @Test
   void getTodosWithCategorySoftwareDesign() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
