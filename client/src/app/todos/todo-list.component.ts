@@ -34,6 +34,7 @@ public todoOwner: string;
 public todoBody: string;
 public todoCategory: string;
 public todoOrderBy: string;
+public viewType: 'card' | 'list' = 'card';
 
 errMsg='';
 private ngUnsubscribe = new Subject<void>();
