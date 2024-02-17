@@ -61,7 +61,7 @@ describe('TodoService', () => {
     describe('Calling getTodos() with parameters correctly form the HTTP request', () => {
 
       it('correctly calls api/todos with filter parameter \'category\'', () => {
-        todoService.getTodos({ sortBy: 'category' }).subscribe(
+        todoService.getTodos({ orderBy: 'category' }).subscribe(
           todos => expect(todos).toBe(testTodos)
         )
 
@@ -110,7 +110,7 @@ describe('TodoService', () => {
 
     it('correctly calls api/todos with multiple filter parameters', () => {
 
-      todoService.getTodos({ body: 'sit', category: 'groceries', sortBy: 'owner' }).subscribe(
+      todoService.getTodos({ body: 'sit', category: 'groceries', orderBy: 'owner' }).subscribe(
         todos => expect(todos).toBe(testTodos)
       );
 
