@@ -1,25 +1,17 @@
 package umm3601.todo;
 
 import static com.mongodb.client.model.Filters.eq;
-//import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertNotEquals;
-//import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-//import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-//import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-//import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,14 +22,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
@@ -52,7 +41,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
 import io.javalin.validation.BodyValidator;
-// import io.javalin.validation.ValidationException;
+import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 
 /**
@@ -294,5 +283,77 @@ class TodoControllerSpec {
     assertEquals("software design", addedTodo.get("category"));
     assertEquals("I have to do my software design", addedTodo.get("body"));
     assertEquals(false, addedTodo.get("status"));
+  }
+
+  @Test
+  void addTodoWithBadOwner() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "",
+          "status": false,
+          "category": "software design",
+          "body": "I have to do my software design"
+        }
+        """;
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
+  }
+
+  @Test
+  void addTodoWithBadStatus() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "Billith",
+          "status": "complete",
+          "category": "software design",
+          "body": "I have to do my software design"
+        }
+        """;
+        when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
+  }
+
+  @Test
+  void addTodoWithBadCategory() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "Billith",
+          "status": false,
+          "category": "not a category",
+          "body": "I have to do my software design"
+        }
+        """;
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
+  }
+
+  @Test
+  void addTodoWithBadBody() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "Billith",
+          "status": false,
+          "category": "software design",
+          "body": ""
+        }
+        """;
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
   }
 }
