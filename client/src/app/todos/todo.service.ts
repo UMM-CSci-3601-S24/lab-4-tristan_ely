@@ -23,7 +23,7 @@ export class TodoService {
         httpParams = httpParams.set('category', filters.category);
       }
       if (filters.orderBy) {
-        httpParams = httpParams.set('orderBy', filters.orderBy);
+        httpParams = httpParams.set('sortby', filters.orderBy);
       }
     }
 
