@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 //import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +49,9 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
-//import io.javalin.validation.BodyValidator;
-//import io.javalin.validation.ValidationException;
-//import io.javalin.validation.Validator;
+// import io.javalin.validation.BodyValidator;
+// import io.javalin.validation.ValidationException;
+import io.javalin.validation.Validator;
 
 /**
  * Tests the logic of the TodoController
@@ -152,11 +153,11 @@ class TodoControllerSpec {
         .append("category", "video games")
         .append("body", "I have to play video games"));
     testTodos.add(
-        new Document()
-            .append("owner", "Blanche")
-            .append("status", true)
-            .append("category", "software design")
-            .append("body", "I have to do my software design"));
+      new Document()
+        .append("owner", "Blanche")
+        .append("status", true)
+        .append("category", "software design")
+        .append("body", "I have to do my software design"));
 
     frysId = new ObjectId();
     Document fry = new Document()
@@ -236,7 +237,7 @@ class TodoControllerSpec {
 
     verify(ctx).json(todoArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-
+  
     List<Todo> todos = todoArrayListCaptor.getValue();
     assertEquals(5, todos.size());
     assertEquals("Blanche", todos.get(0).owner);
@@ -244,5 +245,24 @@ class TodoControllerSpec {
     assertEquals("Fry", todos.get(2).owner);
     assertEquals("Fry", todos.get(3).owner);
     assertEquals("Fry", todos.get(4).owner);
+  }
+  
+  @Test
+  void getTodosWithCategorySoftwareDesign() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("category", Collections.singletonList("software design"));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+    when(ctx.queryParamAsClass("category", String.class))
+    .thenReturn(Validator.create(String.class, "software design", "category"));
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(todoArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+
+    assertEquals(2, todoArrayListCaptor.getValue().size());
+    for (Todo todo : todoArrayListCaptor.getValue()) {
+      assertEquals("software design", todo.category);
+    }
   }
 }
