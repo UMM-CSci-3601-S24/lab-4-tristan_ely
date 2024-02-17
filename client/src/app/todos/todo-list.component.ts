@@ -37,6 +37,7 @@ public todoCategory: string;
 public todoOrderBy: string;
 public viewType: 'card' | 'list' = 'card';
 
+
 errMsg='';
 private ngUnsubscribe = new Subject<void>();
 
@@ -54,7 +55,7 @@ private ngUnsubscribe = new Subject<void>();
   getTodosFromServer(): void {
 
     this.todoService.getTodos({
-      orderBy: this.todoOrderBy,
+      sortBy: this.todoSortBy,
       body: this.todoBody,
       category: this.todoCategory
     }).pipe(

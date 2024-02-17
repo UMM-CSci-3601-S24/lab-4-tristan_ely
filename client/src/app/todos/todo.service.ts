@@ -13,7 +13,7 @@ export class TodoService {
   constructor(private httpClient: HttpClient) {
   }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getTodos(filters?: { body?: string; category?: string; orderBy?: string }): Observable<Todo[]> {
+  getTodos(filters?: { body?: string; category?: string; sortBy?: string }): Observable<Todo[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.body) {
@@ -22,8 +22,8 @@ export class TodoService {
       if (filters.category) {
         httpParams = httpParams.set('category', filters.category);
       }
-      if (filters.orderBy) {
-        httpParams = httpParams.set('orderBy', filters.orderBy);
+      if (filters.sortBy) {
+        httpParams = httpParams.set('sortby', filters.sortBy);
       }
     }
 

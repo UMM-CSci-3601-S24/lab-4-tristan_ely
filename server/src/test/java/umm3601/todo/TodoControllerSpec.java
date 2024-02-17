@@ -230,6 +230,24 @@ class TodoControllerSpec {
     }
 
   @Test
+  void getTodosSortedByOwner() throws IOException {
+    when(ctx.queryParam("sortby")).thenReturn("owner");
+    when(ctx.queryParam("sortorder")).thenReturn("asc");
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(todoArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+
+    List<Todo> todos = todoArrayListCaptor.getValue();
+    assertEquals(5, todos.size());
+    assertEquals("Blanche", todos.get(0).owner);
+    assertEquals("Blanche", todos.get(1).owner);
+    assertEquals("Fry", todos.get(2).owner);
+    assertEquals("Fry", todos.get(3).owner);
+    assertEquals("Fry", todos.get(4).owner);
+  }
+
+  @Test
   void getTodosWithCategorySoftwareDesign() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
     queryParams.put("category", Collections.singletonList("software design"));

@@ -61,16 +61,16 @@ describe('TodoService', () => {
     describe('Calling getTodos() with parameters correctly form the HTTP request', () => {
 
       it('correctly calls api/todos with filter parameter \'category\'', () => {
-        todoService.getTodos({ orderBy: 'category' }).subscribe(
+        todoService.getTodos({ sortBy: 'category' }).subscribe(
           todos => expect(todos).toBe(testTodos)
         )
 
         const req = httpTestingController.expectOne(
-          (request) => request.url.startsWith(todoService.todoUrl) && request.params.has('orderBy')
+          (request) => request.url.startsWith(todoService.todoUrl) && request.params.has('sortby')
         );
 
         expect(req.request.method).toEqual('GET');
-        expect(req.request.params.get('orderBy')).toEqual('category');
+        expect(req.request.params.get('sortby')).toEqual('category');
 
         req.flush(testTodos);
       });
@@ -110,19 +110,19 @@ describe('TodoService', () => {
 
     it('correctly calls api/todos with multiple filter parameters', () => {
 
-      todoService.getTodos({ body: 'sit', category: 'groceries', orderBy: 'owner' }).subscribe(
+      todoService.getTodos({ body: 'sit', category: 'groceries', sortBy: 'owner' }).subscribe(
         todos => expect(todos).toBe(testTodos)
       );
 
       const req = httpTestingController.expectOne(
-        (request) => request.url.startsWith(todoService.todoUrl) && request.params.has('contains') && request.params.has('category') && request.params.has('orderBy')
+        (request) => request.url.startsWith(todoService.todoUrl) && request.params.has('contains') && request.params.has('category') && request.params.has('sortby')
       );
 
       expect(req.request.method).toEqual('GET');
 
       expect(req.request.params.get('contains')).toEqual('sit');
       expect(req.request.params.get('category')).toEqual('groceries');
-      expect(req.request.params.get('orderBy')).toEqual('owner');
+      expect(req.request.params.get('sortby')).toEqual('owner');
 
       req.flush(testTodos);
       });
