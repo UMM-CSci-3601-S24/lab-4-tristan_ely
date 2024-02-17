@@ -23,7 +23,7 @@ export class TodoService {
         httpParams = httpParams.set('category', filters.category);
       }
       if (filters.orderBy) {
-        httpParams = httpParams.set('sortby', filters.orderBy);
+        httpParams = httpParams.set('orderby', filters.orderBy);
       }
     }
 
@@ -43,13 +43,14 @@ export class TodoService {
       filters.owner = filters.owner.toLowerCase();
       filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
     }
-    if (filters.limit) {
-      filteredTodos = filteredTodos.slice(0, filters.limit);
-    }
 
     if (filters.body) {
       filters.body = filters.body.toLowerCase();
       filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
+    }
+
+    if (filters.limit) {
+      filteredTodos = filteredTodos.slice(0, filters.limit);
     }
 
     return filteredTodos;
