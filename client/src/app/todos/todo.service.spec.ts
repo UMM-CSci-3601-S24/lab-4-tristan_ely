@@ -181,6 +181,16 @@ describe('TodoService', () => {
         expect(todo.status === todoStatus);
       })
     });
+
+    it('moves to second todo with page number equal to 2', () => {
+      const todoOwner = 'Chris';
+      const filteredTodos = todoService.filterTodos(testTodos, { limit: 1, page: 2 });
+      // Should only have 1 todo in array
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.owner.indexOf(todoOwner)).toBeGreaterThanOrEqual(0);
+      })
+    });
   });
 
   describe('When getUserById() is given an ID', () => {
