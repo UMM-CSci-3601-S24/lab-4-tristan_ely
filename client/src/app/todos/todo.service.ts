@@ -56,6 +56,10 @@ export class TodoService {
     return filteredTodos;
   }
 
+  getTodoById(id: string): Observable<Todo> {
+    return this.httpClient.get<Todo>(`${this.todoUrl}/${id}`);
+  }
+
   addTodo(newTodo: Partial<Todo>): Observable<string> {
     return this.httpClient.post<{id: string}>(this.todoUrl, newTodo).pipe(map(res => res.id));
   }

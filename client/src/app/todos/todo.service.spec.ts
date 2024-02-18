@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { Todo } from './todo';
 import { TodoService } from './todo.service';
+import { of } from 'rxjs';
 
 describe('TodoService', () => {
   const testTodos: Todo[] = [
@@ -180,6 +181,28 @@ describe('TodoService', () => {
         expect(todo.status === todoStatus);
       })
     });
-
   });
+
+  describe('When getUserById() is given an ID', () => {
+
+     it('calls api/todos/id with the correct ID', waitForAsync(() => {
+
+       const targetTodo: Todo = testTodos[1];
+       const targetId: string = targetTodo._id;
+
+       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(targetTodo));
+
+
+       todoService.getTodoById(targetId).subscribe((todo) => {
+         expect(todo).withContext('returns the target todo').toBe(targetTodo);
+
+         expect(mockedMethod)
+           .withContext('one call')
+           .toHaveBeenCalledTimes(1);
+         expect(mockedMethod)
+           .withContext('talks to the correct endpoint')
+           .toHaveBeenCalledWith(`${todoService.todoUrl}/${targetId}`);
+       });
+     }));
+   });
 });
