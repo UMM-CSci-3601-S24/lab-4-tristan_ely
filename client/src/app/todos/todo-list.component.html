@@ -19,11 +19,12 @@
               (input)="getTodosFromServer()">
           </mat-form-field>
 
-          <mat-form-field class="input-field">
-            <mat-label>Limit Display</mat-label>
-            <input matInput data-test="todoLimitInput" type="number" placeholder="Limit display" min="0" max="200"
-              [(ngModel)]="todoLimit" (input)="updateFilter()">
-          </mat-form-field>
+          <mat-paginator [length]="serverFilteredTodos.length"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page"
+              (page)="changePage($event)">
+            </mat-paginator>
 
         </div>
 

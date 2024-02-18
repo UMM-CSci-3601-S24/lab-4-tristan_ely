@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { MatNavList, MatListSubheaderCssMatStyler, MatListItem, MatListItemAvatar, MatListItemTitle, MatListItemLine } from '@angular/material/list';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatOption } from '@angular/material/core';
@@ -24,7 +25,7 @@ import { TodoCardComponent } from "./todo-card.component";
     styleUrl: './todo-list.component.scss',
     providers: [],
     standalone: true,
-    imports: [MatIconModule, MatCard, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatHint, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatNavList, MatListSubheaderCssMatStyler, MatListItem, RouterLink, MatListItemAvatar, MatListItemTitle, MatListItemLine, MatError, TodoCardComponent]
+    imports: [MatPaginatorModule, MatIconModule, MatCard, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatHint, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatNavList, MatListSubheaderCssMatStyler, MatListItem, RouterLink, MatListItemAvatar, MatListItemTitle, MatListItemLine, MatError, TodoCardComponent]
 })
 
 export class TodoListComponent implements OnInit, OnDestroy{
@@ -44,15 +45,15 @@ public viewType: 'card' | 'list' = 'card';
 errMsg='';
 private ngUnsubscribe = new Subject<void>();
 
-  /**
-   * This constructor injects both an instance of `UserService`
-   * and an instance of `MatSnackBar` into this component.
-   *
-   * @param todoService the `UserService` used to get users from the server
-   * @param snackBar the `MatSnackBar` used to display feedback
-   */
-  constructor(private todoService: TodoService, private snackBar: MatSnackBar) {
-  }
+/**
+ * This constructor injects both an instance of `UserService`
+ * and an instance of `MatSnackBar` into this component.
+ *
+ * @param todoService the `UserService` used to get users from the server
+ * @param snackBar the `MatSnackBar` used to display feedback
+ */
+constructor(private todoService: TodoService, private snackBar: MatSnackBar) {
+}
 
 
   getTodosFromServer(): void {
@@ -80,8 +81,14 @@ private ngUnsubscribe = new Subject<void>();
 
   public updateFilter() {
     this.filteredTodos = this.todoService.filterTodos(
-      this.serverFilteredTodos, { limit: this.todoLimit, status: this.todoStatus, owner: this.todoOwner, body: this.todoBody }
+      this.serverFilteredTodos, { limit: this.todoLimit, status: this.todoStatus, owner: this.todoOwner, body: this.todoBody, page: this.todoPage}
     );
+  }
+
+  public changePage(event: { pageIndex: number; pageSize: number; }) {
+    this.todoPage = event.pageIndex;
+    this.todoLimit = event.pageSize;
+    this.updateFilter();
   }
 
   ngOnInit(): void {
