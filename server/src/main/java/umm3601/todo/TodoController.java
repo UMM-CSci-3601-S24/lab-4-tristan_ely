@@ -2,16 +2,11 @@ package umm3601.todo;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-// import static com.mongodb.client.model.Filters.regex;
 
-// import java.nio.charset.StandardCharsets;
-// import java.security.MessageDigest;
-// import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-// import java.util.Map;
+import java.util.Map;
 import java.util.Objects;
-// import java.util.regex.Pattern;
 
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -21,7 +16,6 @@ import org.mongojack.JacksonMongoCollection;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-//import com.mongodb.client.result.DeleteResult;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
@@ -35,6 +29,8 @@ public class TodoController implements Controller {
   private static final String API_TODOS = "api/todos";
   private static final String API_TODO_ID = "api/todos/{id}";
   static final String SORT_ORDER_KEY = "sortorder";
+
+  private static final String CATEGORY_REGEX = "^(software design|video games|homework|groceries|)$";
 
   private final JacksonMongoCollection<Todo> todoCollection;
 
@@ -102,10 +98,26 @@ public class TodoController implements Controller {
 
   @Override
   public void addRoutes(Javalin server) {
-    // Get a single todo by ID
+
     server.get(API_TODO_ID, this::getTodo);
-    // list todos, filtered using query parameters
+
     server.get(API_TODOS, this::getTodos);
 
+    server.post(API_TODOS, this::addNewTodo);
+
+  }
+
+  public void addNewTodo(Context ctx) {
+    Todo newTodo = ctx.bodyValidator(Todo.class)
+      .check(tdo -> tdo.owner != null && tdo.owner.length() > 0, "Todo must have a non-empty owner")
+      .check(tdo -> tdo.status || !tdo.status, "Todo must have a boolean status")
+      .check(tdo -> tdo.body != null && tdo.body.length() > 0, "Todo must have a non-empty body")
+      .check(tdo -> tdo.category.matches(CATEGORY_REGEX), "Todo must have a valid category")
+      .get();
+
+    todoCollection.insertOne(newTodo);
+
+    ctx.json(Map.of("id", newTodo._id));
+    ctx.status(HttpStatus.CREATED);
   }
 }
