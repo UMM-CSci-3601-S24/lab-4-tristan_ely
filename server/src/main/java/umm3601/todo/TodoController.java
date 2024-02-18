@@ -98,10 +98,12 @@ public class TodoController implements Controller {
 
   @Override
   public void addRoutes(Javalin server) {
-    // Get a single todo by ID
+
     server.get(API_TODO_ID, this::getTodo);
-    // list todos, filtered using query parameters
+
     server.get(API_TODOS, this::getTodos);
+
+    server.post(API_TODOS, this::addNewTodo);
 
   }
 
