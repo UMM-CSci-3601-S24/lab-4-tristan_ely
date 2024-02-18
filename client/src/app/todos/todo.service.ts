@@ -50,8 +50,8 @@ export class TodoService {
     }
 
     if (filters.limit) {
-      if (filters.page) {
-        const i = filters.page*filters.limit;
+      if (filters.page && filters.page <= filteredTodos.length / filters.limit) {
+        const i = (filters.page - 1) * filters.limit;
         filteredTodos = filteredTodos.slice(i, i + filters.limit);
       }
       else {
