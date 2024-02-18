@@ -50,7 +50,13 @@ export class TodoService {
     }
 
     if (filters.limit) {
-      filteredTodos = filteredTodos.slice(0, filters.limit);
+      if (filters.page) {
+        const i = filters.page*filters.limit;
+        filteredTodos = filteredTodos.slice(i, i + filters.limit);
+      }
+      else {
+        filteredTodos = filteredTodos.slice(0, filters.limit);
+      }
     }
 
     return filteredTodos;
