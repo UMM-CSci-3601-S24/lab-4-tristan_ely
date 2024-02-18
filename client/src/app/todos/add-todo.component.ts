@@ -90,7 +90,7 @@ export class AddTodoComponent {
     this.todoService.addTodo(this.addTodoForm.value).subscribe({
       next: (newId) => {
         this.snackBar.open(
-          'Added todo ${this.addTodoForm.value.owner}',
+          `Added todo ${this.addTodoForm.value.owner}`,
           null,
           { duration: 2000 }
         );
