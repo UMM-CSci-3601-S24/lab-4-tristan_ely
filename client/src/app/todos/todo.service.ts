@@ -32,7 +32,7 @@ export class TodoService {
     })
   }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string, body?: string } ): Todo[] {
+  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string, body?: string, page?: number } ): Todo[] {
     let filteredTodos = todos;
 
     if(filters.status != null) {

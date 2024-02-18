@@ -32,6 +32,7 @@ public serverFilteredTodos: Todo[];
 public filteredTodos: Todo[];
 
 public todoLimit: number;
+public todoPage: number;
 public todoStatus: boolean;
 public todoOwner: string;
 public todoBody: string;
