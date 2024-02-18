@@ -28,7 +28,7 @@ export class AddTodoComponent {
       Validators.maxLength(200),
     ])),
 
-    status: new FormControl('', Validators.compose([
+    status: new FormControl(true, Validators.compose([
       Validators.required,
       Validators.pattern('^(true|false)$'),
     ])),
