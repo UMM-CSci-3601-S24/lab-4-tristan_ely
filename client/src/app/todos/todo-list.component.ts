@@ -31,9 +31,10 @@ import { TodoCardComponent } from "./todo-card.component";
 export class TodoListComponent implements OnInit, OnDestroy{
 public serverFilteredTodos: Todo[];
 public filteredTodos: Todo[];
+public length: number;
 
-public todoLimit: number;
-public todoPage: number;
+public todoLimit: number = 10;
+public todoPage: number = 0;
 public todoStatus: boolean;
 public todoOwner: string;
 public todoBody: string;
@@ -83,6 +84,7 @@ constructor(private todoService: TodoService, private snackBar: MatSnackBar) {
     this.filteredTodos = this.todoService.filterTodos(
       this.serverFilteredTodos, { limit: this.todoLimit, status: this.todoStatus, owner: this.todoOwner, body: this.todoBody, page: this.todoPage}
     );
+    this.length = this.serverFilteredTodos.length;
   }
 
   public changePage(event: { pageIndex: number; pageSize: number; }) {
