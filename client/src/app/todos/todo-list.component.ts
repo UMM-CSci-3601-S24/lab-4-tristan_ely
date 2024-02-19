@@ -84,7 +84,7 @@ constructor(private todoService: TodoService, private snackBar: MatSnackBar) {
     this.filteredTodos = this.todoService.filterTodos(
       this.serverFilteredTodos, { limit: this.todoLimit, status: this.todoStatus, owner: this.todoOwner, body: this.todoBody, page: this.todoPage}
     );
-    this.length = this.serverFilteredTodos.length;
+    this.length = this.todoService.getLength();
   }
 
   public changePage(event: { pageIndex: number; pageSize: number; }) {

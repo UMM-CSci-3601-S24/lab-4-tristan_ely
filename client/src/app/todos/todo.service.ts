@@ -9,6 +9,7 @@ import { Todo } from './todo';
 })
 export class TodoService {
   readonly todoUrl: string = environment.apiUrl + 'todos';
+  private length: number;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -49,6 +50,8 @@ export class TodoService {
       filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
     }
 
+    this.length = filteredTodos.length;
+
     if (filters.limit) {
       if (filters.page && filters.page <= filteredTodos.length / filters.limit) {
         const i = (filters.page) * filters.limit;
@@ -60,6 +63,10 @@ export class TodoService {
     }
 
     return filteredTodos;
+  }
+
+  getLength() {
+    return this.length;
   }
 
   getTodoById(id: string): Observable<Todo> {
