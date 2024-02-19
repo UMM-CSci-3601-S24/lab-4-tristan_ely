@@ -9,6 +9,7 @@ import { Todo } from './todo';
 })
 export class TodoService {
   readonly todoUrl: string = environment.apiUrl + 'todos';
+  private length: number;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -32,7 +33,7 @@ export class TodoService {
     })
   }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string, body?: string } ): Todo[] {
+  filterTodos(todos: Todo[], filters: {limit?: number, status?: boolean, owner?: string, body?: string, page?: number } ): Todo[] {
     let filteredTodos = todos;
 
     if(filters.status != null) {
@@ -49,11 +50,23 @@ export class TodoService {
       filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
     }
 
+    this.length = filteredTodos.length;
+
     if (filters.limit) {
-      filteredTodos = filteredTodos.slice(0, filters.limit);
+      if (filters.page && filters.page <= filteredTodos.length / filters.limit) {
+        const i = (filters.page) * filters.limit;
+        filteredTodos = filteredTodos.slice(i, i + filters.limit);
+      }
+      else {
+        filteredTodos = filteredTodos.slice(0, filters.limit);
+      }
     }
 
     return filteredTodos;
+  }
+
+  getLength() {
+    return this.length;
   }
 
   getTodoById(id: string): Observable<Todo> {
