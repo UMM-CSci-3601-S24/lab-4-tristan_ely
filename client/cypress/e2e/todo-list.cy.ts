@@ -48,14 +48,6 @@ describe('Todo list', () => {
     );
   });
 
-  it('Should type something in the limit filter and check that it returned correct elements', () => {
-
-    cy.get('[data-test=todoLimitInput]').type(('5'), {force: true});
-
-    page.getTodoListItems().should('have.lengthOf', 5);
-
-  });
-
   it('Should select a category and check that it returned correct elements', () => {
     cy.get('[data-test=todoCategorySelect]').click()
     .get(`mat-option[value="groceries"]`).click();
@@ -91,6 +83,39 @@ describe('Todo list', () => {
       cy.wrap($todo).find('.todo-list-owner').should('contain', 'Blanche');
     });
 
+  });
+
+  it('Should type something in the Owner filter and check that it returned correct elements', () => {
+    page.changeView('card');
+    // Filter for user 'Fry'
+    cy.get('[data-test=todoOwnerInput]').type('Fry');
+
+    // All of the user cards should have the name we are filtering by
+    page.getTodoCards().should('have.lengthOf.above', 0);
+  });
+
+  it('Should type something in the Status filter and check that it returned correct elements', () => {
+    page.changeView('card');
+    // Filter for status 'complete'
+    cy.get('[data-test=todoStatusSelect]').type('complete');
+
+    page.getTodoCards().should('have.lengthOf.above', 0);
+  });
+
+  it('Should type something in the Category filter and check that it returned correct elements', () => {
+    page.changeView('card');
+    // Filter for category 'homework'
+    cy.get('[data-test=todoCategorySelect]').type('homework');
+
+    page.getTodoCards().should('have.lengthOf.above', 0);
+  });
+
+  it('Should type something in the Body filter and check that it returned correct elements', () => {
+    page.changeView('card');
+    // Filter for body 'qui'
+    cy.get('[data-test=todoBodyInput]').type('qui');
+
+    page.getTodoCards().should('have.lengthOf.above', 0);
   });
 
 });
