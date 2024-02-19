@@ -1,7 +1,7 @@
-.todo-card.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.todo-list-title {
+  padding: 1%;
+  margin: 1%;
+  font-size: 2rem;
 }
 
 .todo-card {
@@ -37,4 +37,9 @@
 
 .todo-list-item:hover {
   background-color: #a9cddf;
+}
+
+.paginator {
+  display: flex;
+  margin-bottom: 10px;
 }
