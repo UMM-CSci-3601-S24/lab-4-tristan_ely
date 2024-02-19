@@ -2,7 +2,7 @@
 export class TodoListPage {
 
   private readonly radioButtonSelector = `[data-test=viewTypeRadio] mat-radio-button`;
-
+  private readonly addTodoButtonSelector = '[data-test=addTodoButton]';
 
   navigateTo() {
     return cy.visit('/todos');
@@ -47,5 +47,9 @@ export class TodoListPage {
 
   changeView(viewType: 'list' | 'card') {
     return cy.get(`${this.radioButtonSelector}[value="${viewType}"]`).click();
+  }
+
+  addTodoButton() {
+    return cy.get(this.addTodoButtonSelector);
   }
 }

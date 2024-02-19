@@ -2,7 +2,7 @@ import { TodoListPage } from "cypress/support/todo-list.po";
 
 const page = new TodoListPage();
 
-describe('Todo list', () => {
+describe('Todo Card', () => {
 
   beforeEach(() => {
     page.navigateTo();
@@ -48,6 +48,12 @@ describe('Todo list', () => {
 
     page.getTodoCards().should('have.lengthOf.above', 0);
   });
+});
+describe('Todo List', () => {
+
+  beforeEach(() => {
+    page.navigateTo();
+  });
 
   it('Should type something in the owner filter and check that it returned correct elements', () => {
     page.changeView('list');
@@ -84,7 +90,7 @@ describe('Todo list', () => {
   it('Should select a category and check that it returned correct elements', () => {
     page.changeView('list');
     cy.get('[data-test=todoCategorySelect]').click()
-    .get(`mat-option[value="groceries"]`).click();
+      .get(`mat-option[value="groceries"]`).click();
 
     page.getTodoListItems().each($todo => {
       cy.wrap($todo).find('.todo-list-category').should('contain', 'Groceries');
@@ -95,7 +101,7 @@ describe('Todo list', () => {
   it('Should select a status and check that it returned correct elements', () => {
     page.changeView('list');
     cy.get('[data-test=todoStatusSelect]').click()
-    .get(`mat-option[id="true"]`).click();
+      .get(`mat-option[id="true"]`).click();
 
     page.getTodoListItems().each($todo => {
       cy.wrap($todo).find('.todo-list-status').should('contain', 'Complete');
@@ -106,10 +112,10 @@ describe('Todo list', () => {
   it('Should select a status, select a category, type an owner, and check that it returned correct elements', () => {
     page.changeView('list');
     cy.get('[data-test=todoStatusSelect]').click()
-    .get(`mat-option[id="false"]`).click();
+      .get(`mat-option[id="false"]`).click();
 
     cy.get('[data-test=todoCategorySelect]').click()
-    .get(`mat-option[value="video games"]`).click();
+      .get(`mat-option[value="video games"]`).click();
 
     cy.get('[data-test=todoOwnerInput]').type('Blanche');
 
@@ -120,5 +126,17 @@ describe('Todo list', () => {
     });
 
   });
+});
 
+describe('Add user', () => {
+
+  beforeEach(() => {
+    page.navigateTo();
+  });
+
+  it('Should click the add user button and go to the right URL', () => {
+    page.addTodoButton().click();
+    cy.url().should(url => expect(url.endsWith('/todos/new')).to.be.true);
+    cy.get('.add-todo-title').should('have.text', 'New Todo');
+  });
 });
