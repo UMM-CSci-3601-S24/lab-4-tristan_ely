@@ -128,15 +128,31 @@ describe('Todo List', () => {
   });
 });
 
-describe('Add user', () => {
+describe('Buttons', () => {
 
   beforeEach(() => {
     page.navigateTo();
   });
+  describe('Add Todo Button', () => {
+    it('Should click the add user button and go to the right URL', () => {
+      page.addTodoButton().click();
+      cy.url().should(url => expect(url.endsWith('/todos/new')).to.be.true);
+      cy.get('.add-todo-title').should('have.text', 'New Todo');
+    });
+  });
 
-  it('Should click the add user button and go to the right URL', () => {
-    page.addTodoButton().click();
-    cy.url().should(url => expect(url.endsWith('/todos/new')).to.be.true);
-    cy.get('.add-todo-title').should('have.text', 'New Todo');
+  describe('Profile Button', () => {
+
+    it('Should click view profile on a user and go to the right URL in card view and have correct owner', () => {
+      page.getTodoCards().first().then((card) => {
+        const firstTodoOwner = card.find('.todo-card-owner').text();
+
+        page.clickViewProfile(page.getTodoCards().first());
+
+        cy.url().should('match', /\/todos\/[0-9a-fA-F]{24}$/);
+
+        cy.get('.todo-card-owner').first().should('have.text', firstTodoOwner);
+      });
+    });
   });
 });

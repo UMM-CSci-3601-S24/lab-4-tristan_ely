@@ -3,6 +3,7 @@ export class TodoListPage {
 
   private readonly radioButtonSelector = `[data-test=viewTypeRadio] mat-radio-button`;
   private readonly addTodoButtonSelector = '[data-test=addTodoButton]';
+  private readonly profileButtonSelector = '[data-test=viewProfileButton]';
 
   navigateTo() {
     return cy.visit('/todos');
@@ -51,5 +52,9 @@ export class TodoListPage {
 
   addTodoButton() {
     return cy.get(this.addTodoButtonSelector);
+  }
+
+  clickViewProfile(card: Cypress.Chainable<JQuery<HTMLElement>>) {
+    return card.find<HTMLButtonElement>(this.profileButtonSelector).click();
   }
 }
