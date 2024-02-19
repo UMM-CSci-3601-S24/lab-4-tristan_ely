@@ -1,14 +1,8 @@
 
 export class TodoListPage {
-  private readonly baseUrl = '/users';
-  private readonly pageTitle = '.user-list-title';
-  private readonly userCardSelector = '.user-cards-container app-user-card';
-  private readonly userListItemsSelector = '.user-nav-list .user-list-item';
-  private readonly profileButtonSelector = '[data-test=viewProfileButton]';
+
   private readonly radioButtonSelector = `[data-test=viewTypeRadio] mat-radio-button`;
-  private readonly userRoleDropdownSelector = '[data-test=userRoleSelect]';
-  private readonly dropdownOptionSelector = `mat-option`;
-  private readonly addUserButtonSelector = '[data-test=addUserButton]';
+
 
   navigateTo() {
     return cy.visit('/todos');
