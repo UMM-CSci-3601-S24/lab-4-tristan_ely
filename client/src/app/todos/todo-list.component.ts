@@ -40,7 +40,7 @@ public todoOwner: string;
 public todoBody: string;
 public todoCategory: string;
 public todoOrderBy: string;
-public viewType: 'card' | 'list' = 'card';
+public viewType: 'list' | 'card' = 'list';
 
 
 errMsg='';
