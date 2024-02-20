@@ -3,7 +3,7 @@ export class TodoListPage {
 
   private readonly radioButtonSelector = `[data-test=viewTypeRadio] mat-radio-button`;
   private readonly addTodoButtonSelector = '[data-test=addTodoButton]';
-  private readonly profileButtonSelector = '[data-test=viewProfileButton]';
+  private readonly profileButtonSelector = '[data-test=viewTodoDetailsButton]';
 
   navigateTo() {
     return cy.visit('/todos');

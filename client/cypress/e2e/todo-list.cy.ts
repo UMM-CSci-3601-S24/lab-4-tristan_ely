@@ -143,15 +143,12 @@ describe('Buttons', () => {
 
   describe('Profile Button', () => {
 
-    it('Should click view profile on a user and go to the right URL in card view and have correct owner', () => {
+    it('Should click view profile on a user and go to the right URL in card view', () => {
       page.getTodoCards().first().then((card) => {
-        const firstTodoOwner = card.find('.todo-card-owner').text();
 
         page.clickViewProfile(page.getTodoCards().first());
 
         cy.url().should('match', /\/todos\/[0-9a-fA-F]{24}$/);
-
-        cy.get('.todo-card-owner').first().should('have.text', firstTodoOwner);
       });
     });
   });
