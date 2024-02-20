@@ -1,5 +1,10 @@
 
 export class TodoListPage {
+
+  private readonly radioButtonSelector = `[data-test=viewTypeRadio] mat-radio-button`;
+  private readonly addTodoButtonSelector = '[data-test=addTodoButton]';
+  private readonly profileButtonSelector = '[data-test=viewTodoDetailsButton]';
+
   navigateTo() {
     return cy.visit('/todos');
   }
@@ -35,5 +40,21 @@ export class TodoListPage {
    */
   getTodoListItems() {
     return cy.get('.todo-nav-list .todo-list-item');
+  }
+
+  getTodoCards() {
+    return cy.get('.todo-cards-container app-todo-card');
+  }
+
+  changeView(viewType: 'list' | 'card') {
+    return cy.get(`${this.radioButtonSelector}[value="${viewType}"]`).click();
+  }
+
+  addTodoButton() {
+    return cy.get(this.addTodoButtonSelector);
+  }
+
+  clickViewProfile(card: Cypress.Chainable<JQuery<HTMLElement>>) {
+    return card.find<HTMLButtonElement>(this.profileButtonSelector).click();
   }
 }
