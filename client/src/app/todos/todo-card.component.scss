@@ -1,0 +1,26 @@
+.mat-mdc-list-item {
+  &-title,
+  &-line {
+    font-size: 1rem;
+  }
+}
+
+.header-true {
+  background-color: rgb(167, 251, 154);
+  padding-bottom: 10px;
+  padding-top: 8px;
+}
+.header-false {
+  background-color: rgb(250, 154, 154);
+  padding-bottom: 10px;
+  padding-top: 8px;
+}
+
+.status-icon {
+  margin-top: 3px;
+  margin-left: 5px;
+}
+
+.todo-card {
+  margin: 10px;
+}

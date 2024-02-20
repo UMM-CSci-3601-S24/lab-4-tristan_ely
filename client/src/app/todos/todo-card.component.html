@@ -1,21 +1,59 @@
 @if (this.todo) {
-  <mat-card appearance="outlined" class="user-card" style="width: 150px;">
-      <mat-card-title class="todo-card-owner" style="text-align: center;">{{this.todo.owner}}</mat-card-title>
-      <hr style="border-top: thick 1px;" width="100%"/>
-      <mat-card-subtitle class="todo-card-status">Completed: {{this.todo.status}}</mat-card-subtitle>
-      <mat-card-subtitle class="todo-cards-category">{{this.todo.category}}</mat-card-subtitle>
+  <mat-card class="todo-card">
+    @if (this.todo.status === true) {
+      <mat-card-header class="header-true">
+        <mat-icon class="status-icon">check_circle_outline</mat-icon>
+        <mat-card-title class="todo-card-status">Complete</mat-card-title>
+        <mat-card-subtitle class="todo-card-owner">Owner: {{ this.todo.owner }}</mat-card-subtitle>
+      </mat-card-header>
+    }
+    @else {
+      <mat-card-header class="header-false">
+        <mat-icon class="status-icon">cancel</mat-icon>
+        <mat-card-title class="todo-card-status">Incomplete</mat-card-title>
+        <mat-card-subtitle class="todo-card-owner">Owner: {{ this.todo.owner }}</mat-card-subtitle>
+      </mat-card-header>
+    }
+    <mat-card-header class="header">
 
+    </mat-card-header>
     @if (!this.simple) {
       <mat-card-content>
-        <p><span class="todo-card-body">{{this.todo.body}}</span></p>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>dataset</mat-icon>
+            <p matListItemTitle>Category</p>
+            <p matListItemLine class="todo-card-role">{{ this.todo.category }}</p>
+          </mat-list-item>
+          <mat-divider [inset]=true></mat-divider>
+        </mat-list>
       </mat-card-content>
     }
-
-      @if (this.simple) {
-        <mat-card-actions>
-        <button mat-button data-test="viewProfileButton" [routerLink]="['/todos', this.todo._id]">View Profile</button>
+    @if (this.simple) {
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            @if (this.todo.category === 'groceries') {
+                <mat-icon matListItemIcon>local_grocery_store</mat-icon>
+              }
+              @else if (this.todo.category === 'homework') {
+                <mat-icon matListItemIcon>library_books</mat-icon>
+              }
+              @else if (this.todo.category === 'software design') {
+                <mat-icon matListItemIcon>desktop_mac</mat-icon>
+              }
+              @else {
+                <mat-icon matListItemIcon>videogame_asset</mat-icon>
+              }
+            <p matListItemTitle>Category</p>
+            <p matListItemLine class="todo-card-role">{{ this.todo.category }}</p>
+          </mat-list-item>
+          <mat-divider [inset]=true></mat-divider>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button data-test="viewTodoDetailsButton" [routerLink]="['/todos', this.todo._id]">View Todo Details</button>
       </mat-card-actions>
-      }
-
-  </mat-card>
+    }
+</mat-card>
 }
