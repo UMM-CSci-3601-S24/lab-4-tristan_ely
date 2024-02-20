@@ -1,0 +1,45 @@
+.todo-list-title {
+  padding: 1%;
+  margin: 1%;
+  font-size: 2rem;
+}
+
+.todo-card {
+  margin-bottom: 10px;
+  flex: 1 1 140px;
+}
+
+.search-card {
+  margin-bottom: 10px;
+  flex: 1 1 100%;
+}
+
+.mat-radio-button {
+  margin: 0 12px;
+}
+
+.add-todo-fab {
+  position: fixed;
+  bottom: 15px;
+  right: 30px;
+}
+
+.todo-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.todo-list-item:hover {
+  background-color: #a9cddf;
+}
+
+.paginator {
+  display: flex;
+  margin-bottom: 10px;
+}
